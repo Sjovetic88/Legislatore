@@ -221,7 +221,7 @@ async function handleRender(env) {
         <thead>
           <tr>
             <th>DIV</th>
-            <th class="col-params">PESO / RESET / LIVE</th>
+            <th class="col-params">PESO / RESET</th>
             <th class="col-struct">SQD</th>
             <th class="col-struct">G.TOT</th>
             <th class="col-struct">SPLIT</th>
@@ -345,4 +345,4 @@ async function handleRender(env) {
   </body>
   </html>`;
   return new Response(html, { headers: { "Content-Type": "text/html;charset=UTF-8" } });
-}
+}j
