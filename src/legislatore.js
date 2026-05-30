@@ -1,7 +1,7 @@
 /**
- * GOLDBET v1.0 - MODULO 1: IL LEGISLATORE (PRO EDITION)
+ * GOLDBET v1.0 - MODULO 1: IL LEGISLATORE (ULTRA-DENSITY EDITION)
  * Funzioni: Gestione Regole, Round Robin Cron, UI OLED Black.
- * Ottimizzazione: Option A (Truncation), Ciano/Bianco Hierarchy.
+ * Grafica: Montserrat Font, Pulsing Status Dot, Single-Line Layout.
  */
 
 export default {
@@ -136,64 +136,74 @@ async function handleRender(env) {
       * { box-sizing: border-box; margin: 0; padding: 0; }
       body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; padding-bottom: 100px; overflow-x: hidden; }
       
-      .header-container { background: #000; padding: 25px 15px; text-align: center; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid #111; }
-      .logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -1px; display: flex; align-items: center; gap: 12px; }
+      /* Header GOLDBET Style */
+      .header-container { background: #000; padding: 20px 15px; text-align: center; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid #111; }
+      .logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -1px; display: flex; align-items: center; gap: 10px; }
       .gold { color: white; font-style: italic; }
       .dl { color: var(--cyan); font-style: normal; }
       .status-dot { width: 10px; height: 10px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 10px var(--cyan); animation: pulse 2s infinite; }
       @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 229, 255, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); } }
 
-      .top-bar { background: var(--surface); padding: 10px; display: flex; gap: 8px; overflow-x: auto; position: sticky; top: 0; z-index: 90; border-bottom: 1px solid #222; }
-      .btn-tab { background: #1a1a1a; color: #666; border: none; padding: 10px 18px; border-radius: 25px; font-size: 0.7rem; font-weight: 800; white-space: nowrap; }
+      /* Tabs & Filters */
+      .top-bar { background: var(--surface); padding: 8px; display: flex; gap: 6px; overflow-x: auto; position: sticky; top: 0; z-index: 90; border-bottom: 1px solid #222; }
+      .btn-tab { background: #1a1a1a; color: #666; border: none; padding: 8px 14px; border-radius: 20px; font-size: 0.65rem; font-weight: 800; white-space: nowrap; }
       .btn-tab.active { background: var(--cyan); color: #000; }
-      .filter-bar { padding: 12px; display: flex; gap: 10px; justify-content: center; }
-      .filter-btn { background: transparent; border: 1px solid #222; color: #555; padding: 6px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
+      .filter-bar { padding: 8px; display: flex; gap: 8px; justify-content: center; }
+      .filter-btn { background: transparent; border: 1px solid #222; color: #555; padding: 5px 12px; border-radius: 15px; font-size: 0.65rem; font-weight: bold; }
       .filter-btn.active { border-color: var(--gold); color: var(--gold); }
 
+      /* Table */
       .table-container { width: 100%; overflow-x: auto; }
-      table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-      th, td { padding: 12px 8px; text-align: center; border-bottom: 1px solid #111; }
+      table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+      th, td { padding: 8px 4px; text-align: center; border-bottom: 1px solid #111; height: 45px; }
       
-      th:first-child, td:first-child { position: sticky; left: 0; background: var(--surface); z-index: 100; border-right: 2px solid #222; min-width: 80px; }
-      .sticky-content { display: flex; align-items: center; justify-content: center; gap: 6px; }
-      .div-label { font-weight: 900; color: var(--gold); font-size: 0.8rem; }
-      .flag-input { width: 25px; background: transparent; border: none; text-align: center; font-size: 1.1rem; color: #fff; }
+      /* Sticky Column Slim */
+      th:first-child, td:first-child { position: sticky; left: 0; background: var(--surface); z-index: 100; border-right: 2px solid #222; min-width: 75px; }
+      .sticky-content { display: flex; align-items: center; justify-content: center; gap: 4px; }
+      .div-label { font-weight: 900; color: var(--gold); font-size: 0.75rem; }
+      .flag-input { width: 22px; background: transparent; border: none; text-align: center; font-size: 1rem; color: #fff; }
 
-      input { background: transparent; border: none; color: #fff; text-align: center; font-size: 0.85rem; font-weight: bold; outline: none; }
+      /* Inputs Narrow */
+      input { background: transparent; border: none; color: #fff; text-align: center; font-size: 0.8rem; font-weight: bold; outline: none; }
       input:disabled { color: #444; }
-      .peso-input { width: 40px !important; }
-      .reset-input { width: 50px !important; }
+      .peso-input { width: 35px !important; }
+      .reset-input { width: 45px !important; }
 
+      /* Single Line Params View */
+      .params-row { display: flex; align-items: center; justify-content: flex-start; gap: 8px; width: 100%; min-width: 280px; }
       .info-match-line { 
+        flex: 1;
         font-size: 0.65rem; 
-        margin-top: 6px; 
-        display: block; 
         white-space: nowrap; 
         overflow: hidden; 
         text-overflow: ellipsis; 
-        max-width: 160px;
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
+        text-align: left;
       }
-      .date-cyan { color: var(--cyan); font-weight: 800; }
+      .date-cyan { color: var(--cyan); font-weight: 800; margin-right: 4px; }
       .match-white { color: #fff; font-weight: 400; }
 
+      /* Goals View - Ultra Narrow */
+      .col-goals { min-width: 35px !important; width: 35px !important; padding: 8px 2px !important; }
+      .col-goals input { font-size: 0.75rem; }
+
+      /* View Management */
       .col-struct, .col-params, .col-goals { display: none; }
       [data-view="struct"] .col-struct { display: table-cell; }
       [data-view="params"] .col-params { display: table-cell; }
       [data-view="goals"] .col-goals { display: table-cell; }
 
+      /* Goal Colors */
       .ucl { color: var(--gold); } .uel { color: var(--orange); } .uecl { color: var(--green); }
       .promo { color: var(--cyan); } .retro { color: var(--red); } .play { color: var(--purple); }
 
-      .fab-container { position: fixed; bottom: 25px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
-      .btn-fab { width: 55px; height: 55px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 8px 20px rgba(0,0,0,0.8); }
+      /* FAB Actions */
+      .fab-container { position: fixed; bottom: 20px; right: 15px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+      .btn-fab { width: 50px; height: 50px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.8); }
       .btn-lock { background: #111; color: var(--gold); border: 1px solid var(--gold); }
       .btn-lock.unlocked { background: var(--gold); color: #000; transform: scale(1.1); }
-      .btn-save { background: var(--cyan); color: #000; font-weight: 900; width: 130px; border-radius: 30px; display: none; }
+      .btn-save { background: var(--cyan); color: #000; font-weight: 900; width: 110px; border-radius: 30px; display: none; font-size: 0.8rem; }
 
-      #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 25px; border-radius: 30px; font-weight: 800; font-size: 0.75rem; z-index: 2000; opacity: 0; transition: 0.3s; }
+      #toast { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); padding: 10px 20px; border-radius: 30px; font-weight: 800; font-size: 0.7rem; z-index: 2000; opacity: 0; transition: 0.3s; }
     </style>
   </head>
   <body data-view="params">
@@ -221,7 +231,7 @@ async function handleRender(env) {
         <thead>
           <tr>
             <th>DIV</th>
-            <th class="col-params">PESO / RESET </th>
+            <th class="col-params">PESO | RESET | ULTIMO MATCH</th>
             <th class="col-struct">SQD</th>
             <th class="col-struct">G.TOT</th>
             <th class="col-struct">SPLIT</th>
@@ -248,14 +258,15 @@ async function handleRender(env) {
                 </div>
               </td>
               <td class="col-params">
-                <div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+                <div class="params-row">
                   <input type="number" step="0.1" class="peso-input peso_elo" value="${l.peso_elo}" disabled>
-                  <span style="color: #333;">|</span>
+                  <span style="color: #222;">|</span>
                   <input type="text" class="reset-input data_regressione" value="${dataUI}" placeholder="GG/MM" disabled>
-                </div>
-                <div class="info-match-line">
-                  <span class="date-cyan">${l.info_data || '--/--'}</span>
-                  <span class="match-white"> | ${l.info_match || 'In attesa...'}</span>
+                  <span style="color: #222;">|</span>
+                  <div class="info-match-line">
+                    <span class="date-cyan">${l.info_data || '--/--'}</span>
+                    <span class="match-white">${l.info_match || 'In attesa...'}</span>
+                  </div>
                 </div>
               </td>
               <td class="col-struct"><input type="number" class="num_squadre" value="${l.num_squadre}" disabled></td>
