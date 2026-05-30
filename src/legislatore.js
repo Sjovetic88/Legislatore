@@ -1,5 +1,5 @@
 /**
- * GOLDBET v1.0 - MODULO 1: IL LEGISLATORE (PRO EDITION)
+ * GOLDBET v1.0 : IL LEGISLATORE (PRO EDITION)
  * Funzioni: Gestione Regole, Round Robin Cron, UI OLED Black.
  * Ottimizzazione: Option A (Truncation), Ciano/Bianco Hierarchy.
  */
