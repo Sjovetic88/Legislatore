@@ -58,20 +58,20 @@ async function handleRoundRobin(env) {
     let infoMatch, infoData;
     if (isExtra) {
       infoData = lastRow[3];
-      infoMatch = \`\${lastRow[5]} vs \${lastRow[6]}\`;
+      infoMatch = `${lastRow[5]} vs ${lastRow[6]}`;
     } else {
       infoData = lastRow[1];
-      infoMatch = \`\${lastRow[3]} vs \${lastRow[4]}\`;
+      infoMatch = `${lastRow[3]} vs ${lastRow[4]}`;
     }
 
-    await env.DB.prepare(\`
+    await env.DB.prepare(`
       UPDATE regole_leghe 
       SET info_match = ?, info_data = ?, ultimo_controllo = ? 
       WHERE div = ?
-    \`).bind(infoMatch, infoData, Date.now(), code).run();
+    `).bind(infoMatch, infoData, Date.now(), code).run();
 
   } catch (e) {
-    await env.DB.prepare(\`UPDATE regole_leghe SET ultimo_controllo = ? WHERE div = ?\`)
+    await env.DB.prepare(`UPDATE regole_leghe SET ultimo_controllo = ? WHERE div = ?`)
       .bind(Date.now(), code).run();
   }
 }
@@ -83,7 +83,7 @@ async function handleSave(request, env) {
   try {
     const body = await request.json();
     const statements = body.map(row => {
-      return env.DB.prepare(\`
+      return env.DB.prepare(`
         UPDATE regole_leghe SET 
           bandiera = ?, num_squadre = ?, giornate_totali = ?, 
           soglia_split = ?, vincitore_playoff = ?, peso_elo = ?, 
@@ -91,7 +91,7 @@ async function handleSave(request, env) {
           posti_uecl = ?, posti_promo = ?, posti_retro = ?, 
           playoff = ?, playout = ?
         WHERE div = ?
-      \`).bind(
+      `).bind(
         row.bandiera, parseInt(row.num_squadre), parseInt(row.giornate_totali), 
         parseInt(row.soglia_split), parseInt(row.vincitore_playoff),
         parseFloat(row.peso_elo), row.data_regressione,
@@ -112,15 +112,15 @@ async function handleSave(request, env) {
  * LOGICA RENDER HTML
  */
 async function handleRender(env) {
-  const query = \`
+  const query = `
     SELECT r.* FROM regole_leghe r
     INNER JOIN leagues l ON r.div = l.id
     WHERE l.is_active = 1
     ORDER BY r.div ASC
-  \`;
+  `;
   const { results } = await env.DB.prepare(query).all();
 
-  const html = \`
+  const html = `
   <!DOCTYPE html>
   <html lang="it">
   <head>
@@ -136,7 +136,6 @@ async function handleRender(env) {
       * { box-sizing: border-box; margin: 0; padding: 0; }
       body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; padding-bottom: 100px; overflow-x: hidden; }
       
-      /* Header GOLDBET Style */
       .header-container { background: #000; padding: 25px 15px; text-align: center; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid #111; }
       .logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -1px; display: flex; align-items: center; gap: 12px; }
       .gold { color: white; font-style: italic; }
@@ -144,7 +143,6 @@ async function handleRender(env) {
       .status-dot { width: 10px; height: 10px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 10px var(--cyan); animation: pulse 2s infinite; }
       @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 229, 255, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); } }
 
-      /* Tabs & Filters */
       .top-bar { background: var(--surface); padding: 10px; display: flex; gap: 8px; overflow-x: auto; position: sticky; top: 0; z-index: 90; border-bottom: 1px solid #222; }
       .btn-tab { background: #1a1a1a; color: #666; border: none; padding: 10px 18px; border-radius: 25px; font-size: 0.7rem; font-weight: 800; white-space: nowrap; }
       .btn-tab.active { background: var(--cyan); color: #000; }
@@ -152,24 +150,20 @@ async function handleRender(env) {
       .filter-btn { background: transparent; border: 1px solid #222; color: #555; padding: 6px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
       .filter-btn.active { border-color: var(--gold); color: var(--gold); }
 
-      /* Table */
       .table-container { width: 100%; overflow-x: auto; }
       table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
       th, td { padding: 12px 8px; text-align: center; border-bottom: 1px solid #111; }
       
-      /* Sticky Column Slim */
       th:first-child, td:first-child { position: sticky; left: 0; background: var(--surface); z-index: 100; border-right: 2px solid #222; min-width: 80px; }
       .sticky-content { display: flex; align-items: center; justify-content: center; gap: 6px; }
       .div-label { font-weight: 900; color: var(--gold); font-size: 0.8rem; }
       .flag-input { width: 25px; background: transparent; border: none; text-align: center; font-size: 1.1rem; color: #fff; }
 
-      /* Inputs Narrow */
       input { background: transparent; border: none; color: #fff; text-align: center; font-size: 0.85rem; font-weight: bold; outline: none; }
       input:disabled { color: #444; }
       .peso-input { width: 40px !important; }
       .reset-input { width: 50px !important; }
 
-      /* Info Match Option A (Truncation) */
       .info-match-line { 
         font-size: 0.65rem; 
         margin-top: 6px; 
@@ -177,7 +171,7 @@ async function handleRender(env) {
         white-space: nowrap; 
         overflow: hidden; 
         text-overflow: ellipsis; 
-        max-width: 160px; /* Ottimizzato per A53 */
+        max-width: 160px;
         text-align: center;
         margin-left: auto;
         margin-right: auto;
@@ -185,17 +179,14 @@ async function handleRender(env) {
       .date-cyan { color: var(--cyan); font-weight: 800; }
       .match-white { color: #fff; font-weight: 400; }
 
-      /* View Management */
       .col-struct, .col-params, .col-goals { display: none; }
       [data-view="struct"] .col-struct { display: table-cell; }
       [data-view="params"] .col-params { display: table-cell; }
       [data-view="goals"] .col-goals { display: table-cell; }
 
-      /* Goal Colors */
       .ucl { color: var(--gold); } .uel { color: var(--orange); } .uecl { color: var(--green); }
       .promo { color: var(--cyan); } .retro { color: var(--red); } .play { color: var(--purple); }
 
-      /* FAB Actions */
       .fab-container { position: fixed; bottom: 25px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
       .btn-fab { width: 55px; height: 55px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 8px 20px rgba(0,0,0,0.8); }
       .btn-lock { background: #111; color: var(--gold); border: 1px solid var(--gold); }
@@ -245,40 +236,40 @@ async function handleRender(env) {
           </tr>
         </thead>
         <tbody>
-          \${results.map(l => {
+          ${results.map(l => {
             const isMain = ["E0","E1","E2","E3","EC","I1","I2","D1","D2","SP1","SP2","F1","F2","N1","P1","T1","G1","SC0"].includes(l.div);
             const dataUI = l.data_regressione ? l.data_regressione.split('-').reverse().join('/') : "";
-            return \`
-            <tr data-div="\${l.div}" data-type="\${isMain ? 'main' : 'extra'}">
+            return `
+            <tr data-div="${l.div}" data-type="${isMain ? 'main' : 'extra'}">
               <td>
                 <div class="sticky-content">
-                  <input type="text" class="flag-input bandiera" value="\${l.bandiera || '🏳️'}" disabled>
-                  <span class="div-label">\${l.div}</span>
+                  <input type="text" class="flag-input bandiera" value="${l.bandiera || '🏳️'}" disabled>
+                  <span class="div-label">${l.div}</span>
                 </div>
               </td>
               <td class="col-params">
                 <div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
-                  <input type="number" step="0.1" class="peso-input peso_elo" value="\${l.peso_elo}" disabled>
+                  <input type="number" step="0.1" class="peso-input peso_elo" value="${l.peso_elo}" disabled>
                   <span style="color: #333;">|</span>
-                  <input type="text" class="reset-input data_regressione" value="\${dataUI}" placeholder="GG/MM" disabled>
+                  <input type="text" class="reset-input data_regressione" value="${dataUI}" placeholder="GG/MM" disabled>
                 </div>
                 <div class="info-match-line">
-                  <span class="date-cyan">\${l.info_data || '--/--'}</span>
-                  <span class="match-white"> | \${l.info_match || 'In attesa...'}</span>
+                  <span class="date-cyan">${l.info_data || '--/--'}</span>
+                  <span class="match-white"> | ${l.info_match || 'In attesa...'}</span>
                 </div>
               </td>
-              <td class="col-struct"><input type="number" class="num_squadre" value="\${l.num_squadre}" disabled></td>
-              <td class="col-struct"><input type="number" class="giornate_totali" value="\${l.giornate_totali}" disabled></td>
-              <td class="col-struct"><input type="number" class="soglia_split" value="\${l.soglia_split}" disabled></td>
-              <td class="col-struct"><input type="number" class="vincitore_playoff" value="\${l.vincitore_playoff}" disabled></td>
-              <td class="col-goals"><input type="number" class="ucl posti_ucl" value="\${l.posti_ucl}" disabled></td>
-              <td class="col-goals"><input type="number" class="uel posti_uel" value="\${l.posti_uel}" disabled></td>
-              <td class="col-goals"><input type="number" class="uecl posti_uecl" value="\${l.posti_uecl}" disabled></td>
-              <td class="col-goals"><input type="number" class="promo posti_promo" value="\${l.posti_promo}" disabled></td>
-              <td class="col-goals"><input type="number" class="retro posti_retro" value="\${l.posti_retro}" disabled></td>
-              <td class="col-goals"><input type="number" class="play playoff" value="\${l.playoff}" disabled></td>
-              <td class="col-goals"><input type="number" class="play playout" value="\${l.playout}" disabled></td>
-            </tr>\`;
+              <td class="col-struct"><input type="number" class="num_squadre" value="${l.num_squadre}" disabled></td>
+              <td class="col-struct"><input type="number" class="giornate_totali" value="${l.giornate_totali}" disabled></td>
+              <td class="col-struct"><input type="number" class="soglia_split" value="${l.soglia_split}" disabled></td>
+              <td class="col-struct"><input type="number" class="vincitore_playoff" value="${l.vincitore_playoff}" disabled></td>
+              <td class="col-goals"><input type="number" class="ucl posti_ucl" value="${l.posti_ucl}" disabled></td>
+              <td class="col-goals"><input type="number" class="uel posti_uel" value="${l.posti_uel}" disabled></td>
+              <td class="col-goals"><input type="number" class="uecl posti_uecl" value="${l.posti_uecl}" disabled></td>
+              <td class="col-goals"><input type="number" class="promo posti_promo" value="${l.posti_promo}" disabled></td>
+              <td class="col-goals"><input type="number" class="retro posti_retro" value="${l.posti_retro}" disabled></td>
+              <td class="col-goals"><input type="number" class="play playoff" value="${l.playoff}" disabled></td>
+              <td class="col-goals"><input type="number" class="play playout" value="${l.playout}" disabled></td>
+            </tr>`;
           }).join("")}
         </tbody>
       </table>
@@ -352,6 +343,6 @@ async function handleRender(env) {
       }
     </script>
   </body>
-  </html>\`;
+  </html>`;
   return new Response(html, { headers: { "Content-Type": "text/html;charset=UTF-8" } });
 }
