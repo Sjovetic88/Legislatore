@@ -1,5 +1,5 @@
 name = "legislatore"
-main = "src/Legislatore.js"
+main = "src/legislatore.js"
 compatibility_date = "2024-01-01"
 
 [triggers]
