@@ -1,7 +1,7 @@
 /**
- * GOLDBET v1.0 - MODULO 1: IL LEGISLATORE (ULTRA-DENSITY EDITION)
+ * GOLDBET v1.0 - MODULO 1: IL LEGISLATORE (ULTRA-SLIM PRODUCTION)
  * Funzioni: Gestione Regole, Round Robin Cron, UI OLED Black.
- * Grafica: Montserrat Font, Pulsing Status Dot, Single-Line Layout.
+ * Ottimizzazione: Ultra-Density Layout, Option A Truncation, P.OFF/P.OUT Headers.
  */
 
 export default {
@@ -134,57 +134,38 @@ async function handleRender(env) {
         --orange: #ff8c00; --green: #39ff14; --red: #ff003c; --purple: #bc13fe; --text: #fff;
       }
       * { box-sizing: border-box; margin: 0; padding: 0; }
-      body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; padding-bottom: 100px; overflow-x: hidden; }
+      body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; padding-bottom: 80px; overflow-x: hidden; }
       
       /* Header GOLDBET Style */
-      .header-container { background: #000; padding: 20px 15px; text-align: center; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid #111; }
-      .logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -1px; display: flex; align-items: center; gap: 10px; }
+      .header-container { background: #000; padding: 15px 10px; text-align: center; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid #111; }
+      .logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: -1px; display: flex; align-items: center; gap: 8px; }
       .gold { color: white; font-style: italic; }
       .dl { color: var(--cyan); font-style: normal; }
-      .status-dot { width: 10px; height: 10px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 10px var(--cyan); animation: pulse 2s infinite; }
-      @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 229, 255, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); } }
+      .status-dot { width: 8px; height: 8px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 8px var(--cyan); animation: pulse 2s infinite; }
+      @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(0, 229, 255, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); } }
 
       /* Tabs & Filters */
-      .top-bar { background: var(--surface); padding: 8px; display: flex; gap: 6px; overflow-x: auto; position: sticky; top: 0; z-index: 90; border-bottom: 1px solid #222; }
-      .btn-tab { background: #1a1a1a; color: #666; border: none; padding: 8px 14px; border-radius: 20px; font-size: 0.65rem; font-weight: 800; white-space: nowrap; }
+      .top-bar { background: var(--surface); padding: 6px; display: flex; gap: 4px; overflow-x: auto; position: sticky; top: 0; z-index: 90; border-bottom: 1px solid #222; }
+      .btn-tab { background: #1a1a1a; color: #555; border: none; padding: 6px 12px; border-radius: 15px; font-size: 0.6rem; font-weight: 800; white-space: nowrap; }
       .btn-tab.active { background: var(--cyan); color: #000; }
-      .filter-bar { padding: 8px; display: flex; gap: 8px; justify-content: center; }
-      .filter-btn { background: transparent; border: 1px solid #222; color: #555; padding: 5px 12px; border-radius: 15px; font-size: 0.65rem; font-weight: bold; }
+      .filter-bar { padding: 6px; display: flex; gap: 6px; justify-content: center; }
+      .filter-btn { background: transparent; border: 1px solid #222; color: #444; padding: 4px 10px; border-radius: 12px; font-size: 0.6rem; font-weight: bold; }
       .filter-btn.active { border-color: var(--gold); color: var(--gold); }
 
-      /* Table */
+      /* Table Core */
       .table-container { width: 100%; overflow-x: auto; }
-      table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-      th, td { padding: 8px 4px; text-align: center; border-bottom: 1px solid #111; height: 45px; }
+      table { width: 100%; border-collapse: collapse; font-size: 0.7rem; table-layout: fixed; }
+      th, td { padding: 2px 4px; text-align: center; border-bottom: 1px solid #111; height: 32px; overflow: hidden; }
       
       /* Sticky Column Slim */
-      th:first-child, td:first-child { position: sticky; left: 0; background: var(--surface); z-index: 100; border-right: 2px solid #222; min-width: 75px; }
+      th:first-child, td:first-child { position: sticky; left: 0; background: var(--surface); z-index: 100; border-right: 1px solid #222; width: 75px !important; }
       .sticky-content { display: flex; align-items: center; justify-content: center; gap: 4px; }
-      .div-label { font-weight: 900; color: var(--gold); font-size: 0.75rem; }
-      .flag-input { width: 22px; background: transparent; border: none; text-align: center; font-size: 1rem; color: #fff; }
+      .div-label { font-weight: 900; color: var(--gold); font-size: 0.7rem; }
+      .flag-input { width: 20px; background: transparent; border: none; text-align: center; font-size: 0.9rem; color: #fff; }
 
       /* Inputs Narrow */
-      input { background: transparent; border: none; color: #fff; text-align: center; font-size: 0.8rem; font-weight: bold; outline: none; }
+      input { background: transparent; border: none; color: #fff; text-align: center; font-size: 0.75rem; font-weight: bold; outline: none; width: 100%; }
       input:disabled { color: #444; }
-      .peso-input { width: 35px !important; }
-      .reset-input { width: 45px !important; }
-
-      /* Single Line Params View */
-      .params-row { display: flex; align-items: center; justify-content: flex-start; gap: 8px; width: 100%; min-width: 280px; }
-      .info-match-line { 
-        flex: 1;
-        font-size: 0.65rem; 
-        white-space: nowrap; 
-        overflow: hidden; 
-        text-overflow: ellipsis; 
-        text-align: left;
-      }
-      .date-cyan { color: var(--cyan); font-weight: 800; margin-right: 4px; }
-      .match-white { color: #fff; font-weight: 400; }
-
-      /* Goals View - Ultra Narrow */
-      .col-goals { min-width: 35px !important; width: 35px !important; padding: 8px 2px !important; }
-      .col-goals input { font-size: 0.75rem; }
 
       /* View Management */
       .col-struct, .col-params, .col-goals { display: none; }
@@ -192,18 +173,34 @@ async function handleRender(env) {
       [data-view="params"] .col-params { display: table-cell; }
       [data-view="goals"] .col-goals { display: table-cell; }
 
+      /* Params View: Ultra-Density */
+      .th-params { width: auto; text-align: center; }
+      .params-cell-wrapper { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; }
+      .peso-input { width: 32px !important; }
+      .reset-input { width: 42px !important; }
+      .info-match-line { 
+        flex: 1; font-size: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; 
+      }
+      .date-cyan { color: var(--cyan); font-weight: 800; margin-right: 3px; }
+      .match-white { color: #fff; font-weight: 400; }
+
+      /* Struct & Goals View: Ultra-Narrow */
+      .col-struct { width: 45px; }
+      .col-goals { width: 40px; }
+      .col-goals input, .col-struct input { font-size: 0.7rem; }
+
       /* Goal Colors */
       .ucl { color: var(--gold); } .uel { color: var(--orange); } .uecl { color: var(--green); }
       .promo { color: var(--cyan); } .retro { color: var(--red); } .play { color: var(--purple); }
 
       /* FAB Actions */
-      .fab-container { position: fixed; bottom: 20px; right: 15px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
-      .btn-fab { width: 50px; height: 50px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.8); }
+      .fab-container { position: fixed; bottom: 15px; right: 15px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
+      .btn-fab { width: 45px; height: 45px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.8); }
       .btn-lock { background: #111; color: var(--gold); border: 1px solid var(--gold); }
-      .btn-lock.unlocked { background: var(--gold); color: #000; transform: scale(1.1); }
-      .btn-save { background: var(--cyan); color: #000; font-weight: 900; width: 110px; border-radius: 30px; display: none; font-size: 0.8rem; }
+      .btn-lock.unlocked { background: var(--gold); color: #000; transform: scale(1.05); }
+      .btn-save { background: var(--cyan); color: #000; font-weight: 900; width: 100px; border-radius: 25px; display: none; font-size: 0.7rem; }
 
-      #toast { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); padding: 10px 20px; border-radius: 30px; font-weight: 800; font-size: 0.7rem; z-index: 2000; opacity: 0; transition: 0.3s; }
+      #toast { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 0.65rem; z-index: 2000; opacity: 0; transition: 0.3s; }
     </style>
   </head>
   <body data-view="params">
@@ -230,19 +227,22 @@ async function handleRender(env) {
       <table id="mainTable">
         <thead>
           <tr>
-            <th>DIV</th>
-            <th class="col-params">PESO | RESET | ULTIMO MATCH</th>
+            <th style="width:75px">DIV</th>
+            <!-- View Params -->
+            <th class="col-params th-params">PESO | RESET | ULTIMO MATCH</th>
+            <!-- View Struct -->
             <th class="col-struct">SQD</th>
             <th class="col-struct">G.TOT</th>
             <th class="col-struct">SPLIT</th>
             <th class="col-struct">FINALE</th>
+            <!-- View Goals -->
             <th class="col-goals ucl">UCL</th>
             <th class="col-goals uel">UEL</th>
             <th class="col-goals uecl">UECL</th>
             <th class="col-goals promo">PRO</th>
             <th class="col-goals retro">RET</th>
-            <th class="col-goals play">PO</th>
-            <th class="col-goals play">PY</th>
+            <th class="col-goals play">P.OFF</th>
+            <th class="col-goals play">P.OUT</th>
           </tr>
         </thead>
         <tbody>
@@ -258,7 +258,7 @@ async function handleRender(env) {
                 </div>
               </td>
               <td class="col-params">
-                <div class="params-row">
+                <div class="params-cell-wrapper">
                   <input type="number" step="0.1" class="peso-input peso_elo" value="${l.peso_elo}" disabled>
                   <span style="color: #222;">|</span>
                   <input type="text" class="reset-input data_regressione" value="${dataUI}" placeholder="GG/MM" disabled>
