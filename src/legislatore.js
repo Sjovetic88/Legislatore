@@ -1,7 +1,7 @@
 /**
- * GOLDBET v1.0 - MODULO 1: IL LEGISLATORE (ULTRA-SLIM PRODUCTION)
+ * GOLDBET v1.0 - MODULO 1: IL LEGISLATORE (FINAL PRODUCTION)
  * Funzioni: Gestione Regole, Round Robin Cron, UI OLED Black.
- * Ottimizzazione: Ultra-Density Layout, Option A Truncation, P.OFF/P.OUT Headers.
+ * Layout: Ultra-Density (32px), Colonna Lv. integrata, Option A Truncation.
  */
 
 export default {
@@ -87,14 +87,14 @@ async function handleSave(request, env) {
         UPDATE regole_leghe SET 
           bandiera = ?, num_squadre = ?, giornate_totali = ?, 
           soglia_split = ?, vincitore_playoff = ?, peso_elo = ?, 
-          data_regressione = ?, posti_ucl = ?, posti_uel = ?, 
+          data_regressione = ?, livello = ?, posti_ucl = ?, posti_uel = ?, 
           posti_uecl = ?, posti_promo = ?, posti_retro = ?, 
           playoff = ?, playout = ?
         WHERE div = ?
       `).bind(
         row.bandiera, parseInt(row.num_squadre), parseInt(row.giornate_totali), 
         parseInt(row.soglia_split), parseInt(row.vincitore_playoff),
-        parseFloat(row.peso_elo), row.data_regressione,
+        parseFloat(row.peso_elo), row.data_regressione, parseInt(row.livello),
         parseInt(row.posti_ucl), parseInt(row.posti_uel), 
         parseInt(row.posti_uecl), parseInt(row.posti_promo), 
         parseInt(row.posti_retro), parseInt(row.playoff), 
@@ -136,7 +136,6 @@ async function handleRender(env) {
       * { box-sizing: border-box; margin: 0; padding: 0; }
       body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; padding-bottom: 80px; overflow-x: hidden; }
       
-      /* Header GOLDBET Style */
       .header-container { background: #000; padding: 15px 10px; text-align: center; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid #111; }
       .logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: -1px; display: flex; align-items: center; gap: 8px; }
       .gold { color: white; font-style: italic; }
@@ -144,7 +143,6 @@ async function handleRender(env) {
       .status-dot { width: 8px; height: 8px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 8px var(--cyan); animation: pulse 2s infinite; }
       @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(0, 229, 255, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); } }
 
-      /* Tabs & Filters */
       .top-bar { background: var(--surface); padding: 6px; display: flex; gap: 4px; overflow-x: auto; position: sticky; top: 0; z-index: 90; border-bottom: 1px solid #222; }
       .btn-tab { background: #1a1a1a; color: #555; border: none; padding: 6px 12px; border-radius: 15px; font-size: 0.6rem; font-weight: 800; white-space: nowrap; }
       .btn-tab.active { background: var(--cyan); color: #000; }
@@ -152,32 +150,28 @@ async function handleRender(env) {
       .filter-btn { background: transparent; border: 1px solid #222; color: #444; padding: 4px 10px; border-radius: 12px; font-size: 0.6rem; font-weight: bold; }
       .filter-btn.active { border-color: var(--gold); color: var(--gold); }
 
-      /* Table Core */
       .table-container { width: 100%; overflow-x: auto; }
       table { width: 100%; border-collapse: collapse; font-size: 0.7rem; table-layout: fixed; }
       th, td { padding: 2px 4px; text-align: center; border-bottom: 1px solid #111; height: 32px; overflow: hidden; }
       
-      /* Sticky Column Slim */
       th:first-child, td:first-child { position: sticky; left: 0; background: var(--surface); z-index: 100; border-right: 1px solid #222; width: 75px !important; }
       .sticky-content { display: flex; align-items: center; justify-content: center; gap: 4px; }
       .div-label { font-weight: 900; color: var(--gold); font-size: 0.7rem; }
       .flag-input { width: 20px; background: transparent; border: none; text-align: center; font-size: 0.9rem; color: #fff; }
 
-      /* Inputs Narrow */
       input { background: transparent; border: none; color: #fff; text-align: center; font-size: 0.75rem; font-weight: bold; outline: none; width: 100%; }
       input:disabled { color: #444; }
 
-      /* View Management */
       .col-struct, .col-params, .col-goals { display: none; }
       [data-view="struct"] .col-struct { display: table-cell; }
       [data-view="params"] .col-params { display: table-cell; }
       [data-view="goals"] .col-goals { display: table-cell; }
 
-      /* Params View: Ultra-Density */
-      .th-params { width: auto; text-align: center; }
-      .params-cell-wrapper { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; }
-      .peso-input { width: 32px !important; }
-      .reset-input { width: 42px !important; }
+      /* Params View: Ultra-Density with Lv. */
+      .params-cell-wrapper { display: flex; align-items: center; justify-content: center; gap: 4px; width: 100%; }
+      .peso-input { width: 30px !important; }
+      .reset-input { width: 40px !important; }
+      .lv-input { width: 20px !important; color: var(--gold) !important; }
       .info-match-line { 
         flex: 1; font-size: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; 
       }
@@ -189,11 +183,9 @@ async function handleRender(env) {
       .col-goals { width: 40px; }
       .col-goals input, .col-struct input { font-size: 0.7rem; }
 
-      /* Goal Colors */
       .ucl { color: var(--gold); } .uel { color: var(--orange); } .uecl { color: var(--green); }
       .promo { color: var(--cyan); } .retro { color: var(--red); } .play { color: var(--purple); }
 
-      /* FAB Actions */
       .fab-container { position: fixed; bottom: 15px; right: 15px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
       .btn-fab { width: 45px; height: 45px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.8); }
       .btn-lock { background: #111; color: var(--gold); border: 1px solid var(--gold); }
@@ -228,14 +220,11 @@ async function handleRender(env) {
         <thead>
           <tr>
             <th style="width:75px">DIV</th>
-            <!-- View Params -->
-            <th class="col-params th-params">PESO | RESET | ULTIMO MATCH</th>
-            <!-- View Struct -->
+            <th class="col-params">PESO | RESET | LV | ULTIMO MATCH</th>
             <th class="col-struct">SQD</th>
             <th class="col-struct">G.TOT</th>
             <th class="col-struct">SPLIT</th>
             <th class="col-struct">FINALE</th>
-            <!-- View Goals -->
             <th class="col-goals ucl">UCL</th>
             <th class="col-goals uel">UEL</th>
             <th class="col-goals uecl">UECL</th>
@@ -262,6 +251,8 @@ async function handleRender(env) {
                   <input type="number" step="0.1" class="peso-input peso_elo" value="${l.peso_elo}" disabled>
                   <span style="color: #222;">|</span>
                   <input type="text" class="reset-input data_regressione" value="${dataUI}" placeholder="GG/MM" disabled>
+                  <span style="color: #222;">|</span>
+                  <input type="number" class="lv-input livello" value="${l.livello || 1}" disabled>
                   <span style="color: #222;">|</span>
                   <div class="info-match-line">
                     <span class="date-cyan">${l.info_data || '--/--'}</span>
@@ -331,6 +322,7 @@ async function handleRender(env) {
             vincitore_playoff: tr.querySelector('.vincitore_playoff').value,
             peso_elo: tr.querySelector('.peso_elo').value,
             data_regressione: (dRaw.length === 5) ? dRaw.split('/').reverse().join('-') : dRaw,
+            livello: tr.querySelector('.livello').value,
             posti_ucl: tr.querySelector('.posti_ucl').value,
             posti_uel: tr.querySelector('.posti_uel').value,
             posti_uecl: tr.querySelector('.posti_uecl').value,
